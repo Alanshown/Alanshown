@@ -1,0 +1,7 @@
+from pathlib import Path
+import html
+R=Path(__file__).resolve().parents[1]; A=R/'assets/projects'; A.mkdir(parents=True,exist_ok=True)
+projects=[('animatter','Animatter.js','Physics-driven interaction for the Web.','TypeScript / Embodied + Field','INTERACTION SYSTEMS'),('aov-uabe','AOV UABE','Inspect, edit and export Unity assets.','Python / UnityPy / Desktop','ASSET ENGINEERING'),('hok-betastudio','HOK BetaStudio','A desktop workspace for Honor of Kings assets.','C# / React / 3D + Audio','INTERACTIVE WORLDS')]
+for i,(slug,name,desc,tech,status) in enumerate(projects):
+    motif=['<circle cx="520" cy="70" r="38" fill="none" stroke="#42bfff"/><circle cx="550" cy="90" r="16" fill="#168bff"/>','<path d="M510 35L560 60V115L510 90Z M510 35L465 60V115L510 90Z" fill="none" stroke="#42bfff"/>','<path d="M470 110L510 35L550 110Z M490 110L530 35L570 110Z" fill="none" stroke="#63e9ff"/>'][i]
+    (A/(slug+'.svg')).write_text(f'<svg xmlns="http://www.w3.org/2000/svg" width="620" height="240" viewBox="0 0 620 240"><rect x="1" y="1" width="618" height="238" rx="4" fill="#081625" stroke="#24445d"/>{motif}<g font-family="monospace"><text x="28" y="37" font-size="12" fill="#63e9ff">0{i+1} / {status}</text><text x="28" y="91" font-size="29" fill="#ddf8ff">{name}</text><text x="28" y="147" font-size="16" fill="#b3cedf">{html.escape(desc)}</text><text x="28" y="205" font-size="13" fill="#42bfff">{html.escape(tech)}  ↗</text></g></svg>',encoding='utf-8')
