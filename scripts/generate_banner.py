@@ -56,15 +56,43 @@ def font(size):
         if Path(p).exists(): return ImageFont.truetype(p,size)
     return ImageFont.load_default(size=size)
 def label(im):
-    q=ImageDraw.Draw(im)
-    q.rounded_rectangle((423,68,1175,249),radius=8,fill='#082953',outline='#166aab',width=1)
-    q.text((450,78),'CYBERWIND   /   OPEN SOURCE ATELIER',font=font(13),fill='#42bfff')
-    q.text((445,108),'ALANSHOWN',font=font(62),fill='#ddf8ff')
-    q.text((450,187),'Building tools, systems,',font=font(19),fill='#b3d2e5')
-    q.text((450,214),'and interactive worlds.',font=font(19),fill='#b3d2e5')
-    q.text((55,25),'01 / IDENTITY IN MOTION',font=font(12),fill='#63e9ff')
-    q.text((450,351),'TYPE / SYSTEMS / PHYSICS / WORLDS',font=font(13),fill='#63e9ff')
-    return im
+    # A single immersive CRT surface; large enough to retain texture on GitHub.
+    canvas=Image.new('RGB',(1200,760),'#041226')
+    q=ImageDraw.Draw(canvas)
+    q.rounded_rectangle((8,8,1191,751),radius=28,fill='#082b54',outline='#208ed0',width=3)
+    screen=city.resize((1140,640)).filter(ImageFilter.GaussianBlur(.4))
+    canvas.paste(screen,(30,77))
+    # Monochrome phosphor avatar retains actual sampled reconstruction motion.
+    face=im.crop((54,54,366,366)).resize((450,450),Image.Resampling.NEAREST)
+    mono=np.asarray(face.convert('L')).astype(float)/255
+    rgb=np.stack([10+mono*125,40+mono*195,80+mono*175],axis=-1).clip(0,255).astype('uint8')
+    canvas.paste(Image.fromarray(rgb),(65,130))
+    q=ImageDraw.Draw(canvas)
+    q.rectangle((62,127,518,583),outline='#54daff',width=2)
+    q.rectangle((550,130,1138,580),fill='#082750')
+    q.text((65,42),'CYBERWIND // PERSONAL SYSTEM',font=font(20),fill='#8aeeff')
+    q.text((930,43),'SIGNAL: ONLINE',font=font(16),fill='#63e9ff')
+    q.text((580,152),'ALANSHOWN',font=font(58),fill='#ddf8ff')
+    q.text((582,240),'Building tools, systems,',font=font(23),fill='#a5eaff')
+    q.text((582,274),'and interactive worlds.',font=font(23),fill='#a5eaff')
+    for j,(key,value) in enumerate([('ROLE','INDEPENDENT DEVELOPER'),('FOCUS','INTERACTION / PHYSICS'),('STACK','TYPESCRIPT / PYTHON / C#'),('WORLD','OPEN SOURCE / 3D')]):
+        y=345+j*44
+        q.text((582,y),key,font=font(15),fill='#409ed3')
+        q.text((680,y),value,font=font(18),fill='#b8efff')
+    for k in range(42):
+        h=int(10+28*(1+math.sin(k*.32+len(frames)*math.tau/96)))
+        x=584+k*12
+        q.rectangle((x,564-h,x+6,564),fill=(30,155+int(h),255))
+    q.rectangle((62,612,1138,693),fill='#06254b',outline='#17669e')
+    q.text((84,629),'> reconstruct identity  /  transmit ideas',font=font(20),fill='#74e7ff')
+    q.text((84,662),'  BUILD  /  EXPLORE  /  ITERATE',font=font(16),fill='#389cd5')
+    q.text((65,719),'PIXEL-DERIVED IDENTITY',font=font(13),fill='#5dc9ef')
+    q.text((835,719),'01 / OPEN SOURCE ATELIER',font=font(13),fill='#5dc9ef')
+    # Subpixel scanlines are visible at README width, rather than random flicker.
+    shade=Image.new('RGB',canvas.size); sd=ImageDraw.Draw(shade)
+    for y in range(80,710,4): sd.line((34,y,1165,y),fill=(5,12,17),width=1)
+    canvas=ImageChops.subtract(canvas,shade)
+    return canvas
 frames=[]
 for f in range(96):
     t=f/96
@@ -101,5 +129,5 @@ quant=[im.quantize(palette=palette,dither=Image.Dither.NONE) for im in frames]
 quant[0].save(A/'banner.gif',save_all=True,append_images=quant[1:],duration=90,loop=0,optimize=False,disposal=1)
 frames[48].save(A/'banner.png')
 encoded=base64.b64encode((A/'banner.png').read_bytes()).decode()
-(A/'banner.svg').write_text(f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 {W} {H}"><title>ALANSHOWN — CYBERWIND</title><image width="{W}" height="{H}" xlink:href="data:image/png;base64,{encoded}"/></svg>',encoding='utf-8')
-print(json.dumps({'size':(A/'banner.gif').stat().st_size,'frames':len(frames),'dimensions':[W,H]}))
+(A/'banner.svg').write_text(f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1200 760"><title>ALANSHOWN — CYBERWIND</title><image width="1200" height="760" xlink:href="data:image/png;base64,{encoded}"/></svg>',encoding='utf-8')
+print(json.dumps({'size':(A/'banner.gif').stat().st_size,'frames':len(frames),'dimensions':[1200,760]}))
