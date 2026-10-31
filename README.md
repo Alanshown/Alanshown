@@ -8,10 +8,13 @@
 
 A TypeScript interaction runtime connecting embodied agents and 2.5D physical fields through shared semantics, space and orchestration.
 
-| Asset engineering | Interactive worlds |
-| :--- | :--- |
-| [![AOV UABE](assets/projects/aov-uabe.svg)](https://github.com/Alanshown/AOV_UABE_2022) | [![HOK BetaStudio](assets/projects/hok-betastudio.svg)](https://github.com/Alanshown/HOK-BetaStudio) |
-| UnityPy-based desktop inspection, preview, import and export for Arena of Valor AssetBundles. | C# + React workspace for HOK packages, model/audio previews and batch export. |
+[![AOV UABE](assets/projects/aov-uabe.svg)](https://github.com/Alanshown/AOV_UABE_2022)
+
+UnityPy-based desktop inspection, preview, import and export for Arena of Valor AssetBundles.
+
+[![HOK BetaStudio](assets/projects/hok-betastudio.svg)](https://github.com/Alanshown/HOK-BetaStudio)
+
+C# + React workspace for HOK packages, model/audio previews and batch export.
 
 ## 03 / Engineering focus
 
